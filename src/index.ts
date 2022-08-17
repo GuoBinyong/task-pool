@@ -120,7 +120,11 @@ export class TaskPool<Task = any> {
     /**
      * 任务池
      */
-    pool:Task[] = [];
+    protected _pool:Task[] = [];
+    get pool(){
+        return this._pool ?? (this._pool = []);
+    }
+
 
     /**
      * 添加任务
@@ -129,6 +133,19 @@ export class TaskPool<Task = any> {
     add(...tasks: Task[]) {
         this.pool.push(...tasks);
         this.exec();
+    }
+
+    /**
+     * 移除任务
+     * @param task 
+     * @returns 
+     */
+    remove(task: Task){
+        const pool = this.pool;
+        const index = pool.indexOf(task);
+        if (index === -1) return false;
+        pool.splice(index, 1);
+        return true;
     }
 
 
