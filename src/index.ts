@@ -7,11 +7,53 @@
  * @packageDocumentation
  */
 
- type TaskReturnType<T> = T extends (...args: any) => infer R ? R : T;
- type TaskResult<T> = TaskReturnType<T> extends Promise<infer Res> ? Res : T;
 
-type TaskCompleted<Task> = (result:TaskResult<Task>|undefined,error:any,task:Task)=>void;
-type PoolEmptied<Task> = (taskPool:TaskPool<Task>)=>void;
+/**
+ * 任务的返回类型
+ */
+export type TaskReturnType<T> = T extends (...args: any) => infer R ? R : T;
+/**
+ * 任务的执行结果
+ */
+export type TaskResult<T> = TaskReturnType<T> extends Promise<infer Res> ? Res : T;
+
+/**
+ * 任务完成的回调函数
+ */
+export type TaskCompleted<Task> = (result:TaskResult<Task>|undefined,error:any,task:Task)=>void;
+
+/**
+ * 任务池清空的回市函数
+ */
+export type PoolEmptied<Task> = (taskPool:TaskPool<Task>)=>void;
+
+
+/**
+ * TaskPool 构造函数选项
+ */
+export interface TaskPoolOptions<Task> {
+    /**
+     * 任务完成回调
+     */
+     completed?:TaskCompleted<Task> | null;
+
+     /**
+      * 任务池清空时的回调
+      */
+     emptied?:PoolEmptied<Task>|null;
+
+    /**
+     * 最大并行执行数目
+     */
+     maxExecNum?:number|null;
+
+     /**
+      * 任务列表
+      */
+     tasks?:Task[]|null;
+ 
+}
+
 
 
 
@@ -19,6 +61,16 @@ type PoolEmptied<Task> = (taskPool:TaskPool<Task>)=>void;
  * 任务池
  */
 export class TaskPool<Task = any> {
+
+    constructor(options?:TaskPoolOptions<Task>|null){
+        if (!options) return;
+
+        const {tasks,...otherOpts} = options;
+        Object.assign(this,otherOpts);
+        if (tasks){
+            this.add(...tasks);
+        }
+    }
 
     /**
      * 任务完成回调
