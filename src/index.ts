@@ -29,7 +29,7 @@ export type PoolEmptied<Task> = (taskPool:TaskPool<Task>)=>void;
 
 
 /**
- * TaskPool 构造函数选项
+ * TaskPool 的构造函数选项
  */
 export interface TaskPoolOptions<Task> {
     /**
@@ -148,6 +148,17 @@ export class TaskPool<Task = any> {
         return true;
     }
 
+    /**
+     * 判断任务池中是否包含指定任务
+     * @param task 
+     * @returns 
+     */
+    has(task: Task) {
+       return this.pool.includes(task);
+    }
+
+
+
 
     
     /**
@@ -161,7 +172,7 @@ export class TaskPool<Task = any> {
                 this.emptied?.(this);
                 return;
             }
-            const task = pool.pop()!;
+            const task = pool.shift()!;
             this.execNum++;
             let taskResult;
             try {
