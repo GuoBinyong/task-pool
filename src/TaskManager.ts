@@ -10,7 +10,7 @@ import {TaskPool,TaskPoolOptions} from "./TaskPool"
     /**
      * 获取要执行的任务的回市函数
      */
-    getTask:GetTask<Task>;
+    getTask?:GetTask<Task>|null;
  }
  
  

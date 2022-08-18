@@ -75,10 +75,13 @@
      /**
       * 最大并行执行数目
       */
-     protected _maxExecNum?:null;
-     get maxExecNum(){
+     get maxExecNum() {
          return this._maxExecNum ?? 10;
      }
+     set maxExecNum(value) {
+         this._maxExecNum = value;
+     }
+     protected _maxExecNum?: number | null;
      /**
       * 当前的任务执行数目
       */
