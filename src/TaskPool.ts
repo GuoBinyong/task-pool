@@ -8,19 +8,12 @@
  */
 
 
-/**
- * 任务的返回类型
- */
- export type TaskReturnType<T> = T extends (...args: any) => infer R ? R : T;
- /**
-  * 任务的执行结果
-  */
- export type TaskResult<T> = TaskReturnType<T> extends Promise<infer Res> ? Res : T;
+
  
  /**
   * 任务完成的回调函数
   */
- export type TaskCompleted<Task,TP extends TaskPool<Task> = TaskPool<Task>> = (result:TaskResult<Task>|undefined,error:any,task:Task,taskPool:TP)=>void;
+ export type TaskCompleted<Result,Task,TP extends TaskPool<Task> = TaskPool<Task>> = (result:Result|undefined,error:any,task:Task,taskPool:TP)=>void;
  
  /**
   * 任务池清空的回市函数
@@ -28,13 +21,13 @@
  export type PoolEmptied<TP extends TaskPool = TaskPool> = (taskPool:TP)=>void;
 
 
- export type TaskExecutor<Task,TP extends TaskPool<Task> = TaskPool<Task>> = (task:Task,taskPool:TP)=>any;
+ export type TaskExecutor<Task,Result,TP extends TaskPool<Task> = TaskPool<Task>> = (task:Task,taskPool:TP)=>Result;
  
  
  /**
   * TaskPool 的构造函数选项
   */
- export interface TaskPoolOptions<Task,TP extends TaskPool<Task> = TaskPool<Task>> {
+ export interface TaskPoolOptions<Task,Result,TP extends TaskPool<Task> = TaskPool<Task>> {
      /**
       * 任务完成回调
       */
@@ -53,7 +46,7 @@
       /**
        * 任务执行者
        */
-      executor?:TaskExecutor<Task,TP>|null;
+      executor?:TaskExecutor<Task,Result,TP>|null;
   
  }
  
@@ -69,12 +62,20 @@
  * @param task 
  * @returns 
  */
-export function default_Executor(task:any){
+export function default_Executor<Task>(task:Task):TaskReturnType_Default<Task>|undefined {
     try {
         return typeof task === 'function' ? task() : task;
     }catch (e) {}
 }
 
+/**
+ * 在默认执行器 default_Executor 的情况下，任务的返回类型
+ */
+ export type TaskReturnType_Default<T> = T extends (...args: any) => infer R ? R : T;
+ /**
+  * 在默认执行器 default_Executor 的情况下，任务的执行结果
+  */
+ export type TaskResult_Default<T> = TaskReturnType_Default<T> extends Promise<infer Res> ? Res : T;
 
 
 
@@ -82,9 +83,9 @@ export function default_Executor(task:any){
  /**
   * 任务池
   */
- export abstract class TaskPool<Task = any> {
+ export abstract class TaskPool<Task = any,Result = any> {
  
-     constructor(options?:TaskPoolOptions<Task,TaskPool<Task>>|null){
+     constructor(options?:TaskPoolOptions<Task,Result,TaskPool<Task>>|null){
          if (!options) return;
          Object.assign(this,options);
      }
@@ -92,7 +93,7 @@ export function default_Executor(task:any){
      /**
       * 任务完成回调
       */
-     completed?:TaskCompleted<Task,this> | null;
+     completed?:TaskCompleted<Result,Task,this> | null;
  
      /**
       * 任务池清空时的回调
@@ -106,7 +107,7 @@ export function default_Executor(task:any){
       * @remarks
       * 用户可以自定义任务的执行逻辑
       */
-     executor?:TaskExecutor<Task,this>|null;
+     executor?:TaskExecutor<Task,Result,this>|null;
  
      /**
       * 最大并行执行数目
@@ -187,7 +188,7 @@ export function default_Executor(task:any){
              }
 
              const taskResult = this.execTask(task);
-             const completeTask = (result:TaskResult<Task>|undefined ,error:any)=>{
+             const completeTask = (result:Result|undefined ,error:any)=>{
                  this.execNum--;
                  if (completed){
                      try {

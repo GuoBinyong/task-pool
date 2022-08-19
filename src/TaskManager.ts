@@ -6,7 +6,7 @@ import {TaskPool,TaskPoolOptions} from "./TaskPool"
  */
  export type GetTask<Task> = (taskManager:TaskManager)=>IteratorResult<Task>;
 
- export interface TaskManagerOptions<Task> extends TaskPoolOptions<Task> {
+ export interface TaskManagerOptions<Task,Result> extends TaskPoolOptions<Task,Result> {
     /**
      * 获取要执行的任务的回市函数
      */
@@ -18,9 +18,9 @@ import {TaskPool,TaskPoolOptions} from "./TaskPool"
  /**
   * 任务池
   */
- export class TaskManager<Task = any> extends TaskPool {
+ export class TaskManager<Task = any,Result = any> extends TaskPool {
 
-    constructor(options?:TaskManagerOptions<Task>){
+    constructor(options?:TaskManagerOptions<Task,Result>){
         super(options);
     }
 
