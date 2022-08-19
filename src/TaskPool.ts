@@ -26,6 +26,9 @@
   * 任务池清空的回市函数
   */
  export type PoolEmptied<TP extends TaskPool = TaskPool> = (taskPool:TP)=>void;
+
+
+ export type TaskExecutor<Task,TP extends TaskPool<Task> = TaskPool<Task>> = (task:Task,taskPool:TP)=>any;
  
  
  /**
@@ -46,9 +49,33 @@
       * 最大并行执行数目
       */
       maxExecNum?:number|null;
+      
+      /**
+       * 任务执行者
+       */
+      executor?:TaskExecutor<Task,TP>|null;
   
  }
  
+
+
+
+/**
+ * 默认的任务执行者
+ * 
+ * @remarks
+ * 执行的逻辑是：
+ * - 如果任务是函数，则执行该函数，并将函数结果作为执行结果，否则，将其视为数据，直接将任务本身作为执行结果
+ * @param task 
+ * @returns 
+ */
+export function default_Executor(task:any){
+    try {
+        return typeof task === 'function' ? task() : task;
+    }catch (e) {}
+}
+
+
 
 
  
@@ -71,6 +98,15 @@
       * 任务池清空时的回调
       */
      emptied?:PoolEmptied<this>|null;
+
+
+     /**
+      * 任务执行者
+      * 
+      * @remarks
+      * 用户可以自定义任务的执行逻辑
+      */
+     executor?:TaskExecutor<Task,this>|null;
  
      /**
       * 最大并行执行数目
@@ -116,6 +152,18 @@
       */
      protected abstract nextTask():IteratorResult<Task>;
 
+     /**
+      * 执行任务
+      * @param task 
+      * @returns 
+      */
+     protected execTask(task:Task){
+        this.execNum++;
+        const executor = this.executor ?? default_Executor;
+        const result = executor(task,this);
+        return result instanceof Promise ? result : Promise.resolve(result);
+     }
+
      
 
      /**
@@ -137,13 +185,8 @@
                 this.emptied?.(this);
                 return;
              }
-             this.execNum++;
-             let taskResult;
-             try {
-                 taskResult = typeof task === 'function' ? task() : task;
-             }catch (e) {}
-             taskResult = taskResult instanceof Promise ? taskResult : Promise.resolve(taskResult);
- 
+
+             const taskResult = this.execTask(task);
              const completeTask = (result:TaskResult<Task>|undefined ,error:any)=>{
                  this.execNum--;
                  if (completed){
