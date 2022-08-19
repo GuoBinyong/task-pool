@@ -166,23 +166,16 @@ export function default_Executor<Task>(task:Task):TaskReturnType_Default<Task>|u
      }
 
      
-
-     /**
-      * 判断当前是否需要继续执行
-      */
-     protected get needExec(){
-        return this.isLaunched && this.isExecuting && this.idleNum > 0;
-     }
      
      /**
       * 执行任务
       */
      protected exec(){
          const completed = this.completed;
-         while (this.needExec){
+         while (this.isExecuting){
              const {value:task,done} = this.nextTask();
              if (done){
-                this.isExecuting = false;
+                this.allowExecute = false;
                 this.emptied?.(this);
                 return;
              }
@@ -208,16 +201,23 @@ export function default_Executor<Task>(task:Task):TaskReturnType_Default<Task>|u
 
 
      /**
-      * 是否正在执行
+      * 当前是否正在执行
       */
-     isExecuting = false;
+    get isExecuting(){
+        return this.isLaunched && this.allowExecute && this.idleNum > 0;
+    }
+
+    /**
+     * 是否允许执行
+     */
+     allowExecute = false;
  
      /**
       * 开始执行任务
       */
      start(){
-        if (this.isExecuting || !this.isLaunched) return;
-        this.isExecuting = true;
+        if (this.allowExecute || !this.isLaunched) return;
+        this.allowExecute = true;
         this.exec();
      }
  
@@ -225,7 +225,7 @@ export function default_Executor<Task>(task:Task):TaskReturnType_Default<Task>|u
       * 暂停执行任务
       */
      pause(){
-         this.isExecuting = false;
+         this.allowExecute = false;
      }
 
      /**
