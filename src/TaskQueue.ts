@@ -33,6 +33,10 @@ export class TaskQueue<Task = any,Result = any> extends TaskPool<Task>{
 
     constructor(options?:TaskQueueOptions<Task,Result>|null){
         super(options);
+        if (options){
+            this.tasks = options.tasks!;
+            this.compareFn = options.compareFn!;
+        }
     }
 
     /**

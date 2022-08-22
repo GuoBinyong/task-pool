@@ -22,6 +22,9 @@ import {TaskPool,TaskPoolOptions} from "./TaskPool"
 
     constructor(options?:TaskManagerOptions<Task,Result>){
         super(options);
+        if (options){
+            this._getTask = options.getTask;
+        }
     }
 
 
@@ -36,7 +39,7 @@ import {TaskPool,TaskPoolOptions} from "./TaskPool"
         this._getTask = value;
         this.start();
     }
-    protected _getTask?:GetTask<Task>;
+    protected _getTask?:GetTask<Task>|null;
 
     /**
      * 获取下一个任务
