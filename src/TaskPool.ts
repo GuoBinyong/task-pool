@@ -177,10 +177,10 @@ export function default_Executor<Task>(task:Task):TaskReturnType_Default<Task>|u
       */
      protected async exec(){
          const completed = this.completed;
-         while (this.isExecuting){
+         while (this.canContinueTask){
              const {value:task,done} = await this.nextTask();
              if (done){
-                this.allowExecute = false;
+                this.isPaused = true;
                 this.emptied?.(this);
                 return;
              }
@@ -206,23 +206,38 @@ export function default_Executor<Task>(task:Task):TaskReturnType_Default<Task>|u
 
 
      /**
+      * 能否继续执行任务
+      */
+    get canContinueTask(){
+        return this.allowExecute && this.idleNum > 0;
+    }
+
+     /**
       * 当前是否正在执行
       */
     get isExecuting(){
-        return this.isLaunched && this.allowExecute && this.idleNum > 0;
+        return this.allowExecute && this.execNum>0;
     }
 
     /**
      * 是否允许执行
      */
-     allowExecute = false;
+    get allowExecute(){
+        return this.isLaunched && !this.isPaused;
+    }
+     
+
+     /**
+      * 是否暂停执行
+      */
+    isPaused = true;
  
      /**
       * 开始执行任务
       */
      start(){
-        if (this.allowExecute || !this.isLaunched) return;
-        this.allowExecute = true;
+        if (!this.isLaunched || this.isExecuting) return;
+        this.isPaused = false;
         this.exec();
      }
  
@@ -230,7 +245,7 @@ export function default_Executor<Task>(task:Task):TaskReturnType_Default<Task>|u
       * 暂停执行任务
       */
      pause(){
-         this.allowExecute = false;
+         this.isPaused = true;
      }
 
      /**
