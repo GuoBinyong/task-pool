@@ -43,7 +43,8 @@ export interface TaskManagerOptions<Task, Result> extends TaskPoolOptions<Task, 
 // @public
 export abstract class TaskPool<Task = any, Result = any> {
     	constructor(options?: TaskPoolOptions<Task, Result, TaskPool<Task>> | null);
-    	allowExecute: boolean;
+    	get allowExecute(): boolean;
+    	get canContinueTask(): boolean;
     	completed?: TaskCompleted<Result, Task, this> | null;
     	emptied?: PoolEmptied<this> | null;
     	protected exec(): Promise<void>;
@@ -55,6 +56,7 @@ export abstract class TaskPool<Task = any, Result = any> {
     	get isFull(): boolean;
     	get isIdle(): boolean;
     	isLaunched: boolean;
+    	isPaused: boolean;
     	launch(): void;
     	get maxExecNum(): number;
     	set maxExecNum(value: number);

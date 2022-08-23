@@ -9,5 +9,5 @@
 <b>Signature:</b>
 
 ```typescript
-allowExecute: boolean;
+get allowExecute(): boolean;
 ```

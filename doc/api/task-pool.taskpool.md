@@ -23,7 +23,8 @@ export declare abstract class TaskPool<Task = any, Result = any>
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [\_maxExecNum?](./task-pool.taskpool._maxexecnum.md) | <code>protected</code> | number \| null | <i>(Optional)</i> |
-|  [allowExecute](./task-pool.taskpool.allowexecute.md) |  | boolean | 是否允许执行 |
+|  [allowExecute](./task-pool.taskpool.allowexecute.md) | <code>readonly</code> | boolean | 是否允许执行 |
+|  [canContinueTask](./task-pool.taskpool.cancontinuetask.md) | <code>readonly</code> | boolean | 能否继续执行任务 |
 |  [completed?](./task-pool.taskpool.completed.md) |  | [TaskCompleted](./task-pool.taskcompleted.md)<!-- -->&lt;Result, Task, this&gt; \| null | <i>(Optional)</i> 任务完成回调 |
 |  [emptied?](./task-pool.taskpool.emptied.md) |  | [PoolEmptied](./task-pool.poolemptied.md)<!-- -->&lt;this&gt; \| null | <i>(Optional)</i> 任务池清空时的回调 |
 |  [execNum](./task-pool.taskpool.execnum.md) |  | number | 当前的任务执行数目 |
@@ -33,6 +34,7 @@ export declare abstract class TaskPool<Task = any, Result = any>
 |  [isFull](./task-pool.taskpool.isfull.md) | <code>readonly</code> | boolean | 执行队列是否已满 |
 |  [isIdle](./task-pool.taskpool.isidle.md) | <code>readonly</code> | boolean | 执行队列是否是空闲状态 |
 |  [isLaunched](./task-pool.taskpool.islaunched.md) |  | boolean | 是否已启动 |
+|  [isPaused](./task-pool.taskpool.ispaused.md) |  | boolean | 是否暂停执行 |
 |  [maxExecNum](./task-pool.taskpool.maxexecnum.md) |  | number | 最大并行执行数目 |
 
 ## Methods
