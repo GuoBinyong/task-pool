@@ -8,5 +8,5 @@
 
 |  Package | Description |
 |  --- | --- |
-|  [@gby/task-pool](./task-pool.md) |  |
+|  [@gby/task-pool](./task-pool.md) | 库的摘要信息 |
 

@@ -24,7 +24,7 @@ export declare class TaskQueue<Task = any, Result = any> extends TaskPool<Task>
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [\_tasks?](./task-pool.taskqueue._tasks.md) | <code>protected</code> | Task\[\] \| null | <i>(Optional)</i> |
-|  [compareFn?](./task-pool.taskqueue.comparefn.md) |  | CompareFn&lt;Task&gt; \| null | <i>(Optional)</i> 优先级比较函数 |
+|  [compareFn?](./task-pool.taskqueue.comparefn.md) |  | [CompareFn](./task-pool.comparefn.md)<!-- -->&lt;Task&gt; \| null | <i>(Optional)</i> 优先级比较函数 |
 |  [tasks](./task-pool.taskqueue.tasks.md) |  | Task\[\] | 任务队列 |
 
 ## Methods

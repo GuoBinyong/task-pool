@@ -4,6 +4,12 @@
 
 ## task-pool package
 
+库的摘要信息
+
+## Remarks
+
+库的说明信息
+
 ## Classes
 
 |  Class | Description |
@@ -30,6 +36,7 @@
 
 |  Type Alias | Description |
 |  --- | --- |
+|  [CompareFn](./task-pool.comparefn.md) | 任务优先级比较函数 |
 |  [GetTask](./task-pool.gettask.md) | 获取要执行的任务 |
 |  [PoolEmptied](./task-pool.poolemptied.md) | 任务池清空的回市函数 |
 |  [TaskCompleted](./task-pool.taskcompleted.md) | 任务完成的回调函数 |

@@ -15,6 +15,6 @@ export interface TaskQueueOptions<Task, Result> extends TaskPoolOptions<Task, Re
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [compareFn?](./task-pool.taskqueueoptions.comparefn.md) |  | CompareFn&lt;Task&gt; \| null | <i>(Optional)</i> 优先级比较函数 |
+|  [compareFn?](./task-pool.taskqueueoptions.comparefn.md) |  | [CompareFn](./task-pool.comparefn.md)<!-- -->&lt;Task&gt; \| null | <i>(Optional)</i> 优先级比较函数 |
 |  [tasks?](./task-pool.taskqueueoptions.tasks.md) |  | Task\[\] \| null | <i>(Optional)</i> 任务队列 |
 

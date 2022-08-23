@@ -5,6 +5,9 @@
 ```ts
 
 // @public
+export type CompareFn<Task> = (a: Task, b: Task) => number;
+
+// @public
 export function default_Executor<Task>(task: Task): TaskReturnType_Default<Task> | undefined;
 
 // @public
@@ -24,75 +27,74 @@ export type TaskIteratorResult<Task> = IteratorResult<Task> | Promise<IteratorRe
 
 // @public
 export class TaskManager<Task = any, Result = any> extends TaskPool {
-    constructor(options?: TaskManagerOptions<Task, Result>);
-    get getTask(): GetTask<Task> | null | undefined;
-    set getTask(value: GetTask<Task> | null | undefined);
-    // (undocumented)
+    	constructor(options?: TaskManagerOptions<Task, Result>);
+    	get getTask(): GetTask<Task> | null | undefined;
+    	set getTask(value: GetTask<Task> | null | undefined);
+    	// (undocumented)
     protected _getTask?: GetTask<Task> | null;
-    protected nextTask(): TaskIteratorResult<Task>;
+    	protected nextTask(): TaskIteratorResult<Task>;
 }
 
 // @public
 export interface TaskManagerOptions<Task, Result> extends TaskPoolOptions<Task, Result> {
-    getTask?: GetTask<Task> | null;
+    	getTask?: GetTask<Task> | null;
 }
 
 // @public
 export abstract class TaskPool<Task = any, Result = any> {
-    constructor(options?: TaskPoolOptions<Task, Result, TaskPool<Task>> | null);
-    allowExecute: boolean;
-    completed?: TaskCompleted<Result, Task, this> | null;
-    emptied?: PoolEmptied<this> | null;
-    protected exec(): Promise<void>;
-    execNum: number;
-    protected execTask(task: Task): Promise<any>;
-    executor?: TaskExecutor<Task, Result, this> | null;
-    get idleNum(): number;
-    get isExecuting(): boolean;
-    get isFull(): boolean;
-    get isIdle(): boolean;
-    isLaunched: boolean;
-    launch(): void;
-    get maxExecNum(): number;
-    set maxExecNum(value: number);
-    // (undocumented)
+    	constructor(options?: TaskPoolOptions<Task, Result, TaskPool<Task>> | null);
+    	allowExecute: boolean;
+    	completed?: TaskCompleted<Result, Task, this> | null;
+    	emptied?: PoolEmptied<this> | null;
+    	protected exec(): Promise<void>;
+    	execNum: number;
+    	protected execTask(task: Task): Promise<any>;
+    	executor?: TaskExecutor<Task, Result, this> | null;
+    	get idleNum(): number;
+    	get isExecuting(): boolean;
+    	get isFull(): boolean;
+    	get isIdle(): boolean;
+    	isLaunched: boolean;
+    	launch(): void;
+    	get maxExecNum(): number;
+    	set maxExecNum(value: number);
+    	// (undocumented)
     protected _maxExecNum?: number | null;
-    protected abstract nextTask(): TaskIteratorResult<Task>;
-    pause(): void;
-    start(): void;
-    stop(): void;
+    	protected abstract nextTask(): TaskIteratorResult<Task>;
+    	pause(): void;
+    	start(): void;
+    	stop(): void;
 }
 
 // @public
 export interface TaskPoolOptions<Task, Result, TP extends TaskPool<Task> = TaskPool<Task>> {
-    completed?: TaskCompleted<Task, TP> | null;
-    emptied?: PoolEmptied<TP> | null;
-    executor?: TaskExecutor<Task, Result, TP> | null;
-    maxExecNum?: number | null;
+    	completed?: TaskCompleted<Task, TP> | null;
+    	emptied?: PoolEmptied<TP> | null;
+    	executor?: TaskExecutor<Task, Result, TP> | null;
+    	maxExecNum?: number | null;
 }
 
 // @public
 export class TaskQueue<Task = any, Result = any> extends TaskPool<Task> {
-    constructor(options?: TaskQueueOptions<Task, Result> | null);
-    add(...tasks: Task[]): void;
-    // Warning: (ae-forgotten-export) The symbol "CompareFn" needs to be exported by the entry point index.d.ts
-    compareFn?: CompareFn<Task> | null;
-    has(task: Task): boolean;
-    // (undocumented)
+    	constructor(options?: TaskQueueOptions<Task, Result> | null);
+    	add(...tasks: Task[]): void;
+    	compareFn?: CompareFn<Task> | null;
+    	has(task: Task): boolean;
+    	// (undocumented)
     protected nextTask(): IteratorResult<Task, any>;
-    remove(task: Task): boolean;
-    protected sort(): void;
-    get tasks(): Task[];
-    set tasks(value: Task[]);
-    // (undocumented)
+    	remove(task: Task): boolean;
+    	protected sort(): void;
+    	get tasks(): Task[];
+    	set tasks(value: Task[]);
+    	// (undocumented)
     protected _tasks?: Task[] | null;
-    protected tasksChanged(): void;
+    	protected tasksChanged(): void;
 }
 
 // @public (undocumented)
 export interface TaskQueueOptions<Task, Result> extends TaskPoolOptions<Task, Result> {
-    compareFn?: CompareFn<Task> | null;
-    tasks?: Task[] | null;
+    	compareFn?: CompareFn<Task> | null;
+    	tasks?: Task[] | null;
 }
 
 // @public
@@ -100,7 +102,5 @@ export type TaskResult_Default<T> = TaskReturnType_Default<T> extends Promise<in
 
 // @public
 export type TaskReturnType_Default<T> = T extends (...args: any) => infer R ? R : T;
-
-// (No @packageDocumentation comment for this package)
 
 ```
