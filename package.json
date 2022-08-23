@@ -1,6 +1,6 @@
 {
   "name": "@gby/task-pool",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "task-pool 提供了任务池的功能，可控制任务的并发；即便于独立使用，又便于管理已有的任务业务",
   "main": "dist/task-pool.umd.js",
   "module": "dist/task-pool.mjs",
