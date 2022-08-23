@@ -49,6 +49,11 @@
       executor?:TaskExecutor<Task,Result,TP>|null;
   
  }
+
+/**
+ * 任务迭代结果
+ */
+ export type TaskIteratorResult<Task> = IteratorResult<Task> | Promise<IteratorResult<Task>>
  
 
 
@@ -151,7 +156,7 @@ export function default_Executor<Task>(task:Task):TaskReturnType_Default<Task>|u
      /**
       * 获取下一个任务
       */
-     protected abstract nextTask():IteratorResult<Task>;
+     protected abstract nextTask():TaskIteratorResult<Task>;
 
      /**
       * 执行任务
@@ -170,10 +175,10 @@ export function default_Executor<Task>(task:Task):TaskReturnType_Default<Task>|u
      /**
       * 执行任务
       */
-     protected exec(){
+     protected async exec(){
          const completed = this.completed;
          while (this.isExecuting){
-             const {value:task,done} = this.nextTask();
+             const {value:task,done} = await this.nextTask();
              if (done){
                 this.allowExecute = false;
                 this.emptied?.(this);

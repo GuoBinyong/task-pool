@@ -1,11 +1,14 @@
-import {TaskPool,TaskPoolOptions} from "./TaskPool"
+import {TaskPool,TaskPoolOptions,TaskIteratorResult} from "./TaskPool"
  
  
 /**
  * 获取要执行的任务
  */
- export type GetTask<Task> = (taskManager:TaskManager)=>IteratorResult<Task>;
+ export type GetTask<Task> = (taskManager:TaskManager)=>TaskIteratorResult<Task>;
 
+ /**
+  * TaskManager 构建选项
+  */
  export interface TaskManagerOptions<Task,Result> extends TaskPoolOptions<Task,Result> {
     /**
      * 获取要执行的任务的回市函数
@@ -16,7 +19,7 @@ import {TaskPool,TaskPoolOptions} from "./TaskPool"
  
  
  /**
-  * 任务池
+  * 任务管理器
   */
  export class TaskManager<Task = any,Result = any> extends TaskPool {
 
@@ -44,7 +47,7 @@ import {TaskPool,TaskPoolOptions} from "./TaskPool"
     /**
      * 获取下一个任务
      */
-    protected nextTask():IteratorResult<Task> {
+    protected nextTask():TaskIteratorResult<Task> {
         const getTask = this.getTask;
         return getTask ? getTask(this) : {done:true,value:undefined};
     }
