@@ -116,9 +116,10 @@ export function default_Executor<Task>(task:Task):TaskReturnType_Default<Task>|u
  
      /**
       * 最大并行执行数目
+      * @defaultValue 4
       */
      get maxExecNum() {
-         return this._maxExecNum ?? 10;
+         return this._maxExecNum ?? 4;
      }
      set maxExecNum(value) {
          this._maxExecNum = value;
